@@ -14,7 +14,7 @@ content-type: application/json
 
 
 ### teste de buscar todos os alunos  
-GET http://localhost:40000/GetAllCursos HTTP/1.1  
+GET http://localhost:40000/GetAllClientes HTTP/1.1  
 content-type: application/json  
 Authorization: Bearer {{accessToken}}  
 
@@ -22,8 +22,8 @@ Authorization: Bearer {{accessToken}}
     
 }  
 
-### teste de buscar aluno por ID  
-POST http://localhost:40000/GetCursoByID HTTP/1.1  
+### teste de buscar cliente por ID  
+POST http://localhost:40000/GetClienteByID HTTP/1.1  
 content-type: application/json  
 //Authorization:  {{accessToken}}  
 
@@ -31,40 +31,40 @@ content-type: application/json
     "cursoid": 4  
 }  
 
-### teste de inserção de aluno  
-POST http://localhost:40000/InsertCursos HTTP/1.1  
+### teste de inserção de cliente  
+POST http://localhost:40000/InsertClientes HTTP/1.1  
 content-type: application/json  
 //Authorization: Bearer  
  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2NzM0ODE2NDEsInVzZXJuYW1lIjoicXdlIn0.LRKs8uvt-SJ9E9dMGYRkCs7HhMDlqVmwap_zcaoONeQ  
   
 {      
-    "cursoid": 0,  
-    "codigo": "Nutrição",   
-    "descricao": "Bacharelado em Nutrição",  
-    "ativo": true,  
-    "deleted": false      
+    "clienteid": 0,  
+    "documento": "91993847374",   
+    "nomeRazaoSocial": "Rogerio",  
+    "email": "Rogerio@gmail.com",  
+    "ativo": true      
 }  
 
 ### teste de atualização de aluno  
-POST http://localhost:40000/UpdateCursos HTTP/1.1  
+POST http://localhost:40000/UpdateClientes HTTP/1.1  
 content-type: application/json  
 //Authorization: Bearer  
  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2NzM0ODE2NDEsInVzZXJuYW1lIjoicXdlIn0.LRKs8uvt-SJ9E9dMGYRkCs7HhMDlqVmwap_zcaoONeQ  
 
 {      
-    "cursoid": 9,  
-    "codigo": "xfisio",  
-    "descricao": "xBacharelado em Fisioterapia",  
-    "ativo": true,  
-    "deleted": false   
+    "clienteid": 2,  
+    "documento": "99988889999",  
+    "nomeRazaoSocial": "Roberto",  
+    "email": "rh@gmail.com",  
+    "ativo": true   
 }  
 
 ### teste de atualização de aluno  
-POST http://localhost:40000/DeleteCursos HTTP/1.1  
+POST http://localhost:40000/DeleteClientes HTTP/1.1  
 content-type: application/json  
 //Authorization: Bearer  
  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2NzM0ODE2NDEsInVzZXJuYW1lIjoicXdlIn0.LRKs8uvt-SJ9E9dMGYRkCs7HhMDlqVmwap_zcaoONeQ  
 
 {      
-    "cursoid": 9     
+    "clienteid": 2    
 }  
