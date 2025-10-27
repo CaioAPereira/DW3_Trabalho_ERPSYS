@@ -1,8 +1,8 @@
 const express = require("express");
 const routerApp = express.Router();
 
-const appAlunos = require("../apps/alunos/controller/ctlAlunos");
-const appCursos = require("../apps/cursos/controller/ctlCursos");
+const appContas = require("../apps/contas/controller/ctlContas");
+const appClientes = require("../apps/contasssss/controller/ctlClientes");
 const appLogin = require("../apps/login/controller/ctlLogin");
 
 // middleware that is specific to this router
@@ -14,19 +14,19 @@ routerApp.get("/", (req, res) => {
   res.send("Olá mundo!");
 });
 
-//Rotas de Alunos
-routerApp.get("/getAllAlunos", appLogin.AutenticaJWT, appAlunos.getAllAlunos);
-routerApp.post("/getAlunoByID", appLogin.AutenticaJWT, appAlunos.getAlunoByID);
-routerApp.post("/insertAlunos", appLogin.AutenticaJWT, appAlunos.insertAlunos);
-routerApp.post("/updateAlunos", appLogin.AutenticaJWT, appAlunos.updateAlunos);
-routerApp.post("/DeleteAlunos", appLogin.AutenticaJWT, appAlunos.DeleteAlunos);
+//Rotas de contas
+routerApp.get("/getAllContas", appLogin.AutenticaJWT, appContas.getAllContas);
+routerApp.post("/getAlunoByID", appLogin.AutenticaJWT, appContas.getContaByID);
+routerApp.post("/insertContas", appLogin.AutenticaJWT, appContas.insertContas);
+routerApp.post("/updateContas", appLogin.AutenticaJWT, appContas.updateContas);
+routerApp.post("/DeleteContas", appLogin.AutenticaJWT, appContas.DeleteContas);
 
-//Rotas de Cursos
-routerApp.get("/GetAllCursos", appLogin.AutenticaJWT, appCursos.GetAllCursos);
-routerApp.post("/GetCursoByID", appLogin.AutenticaJWT, appCursos.GetCursoByID);
-routerApp.post("/InsertCursos", appLogin.AutenticaJWT, appCursos.InsertCursos);
-routerApp.post("/UpdateCursos", appLogin.AutenticaJWT, appCursos.UpdateCursos);
-routerApp.post("/DeleteCursos", appLogin.AutenticaJWT, appCursos.DeleteCursos);
+//Rotas de Clientes
+routerApp.get("/GetAllClientes", appLogin.AutenticaJWT, appClientes.GetAllClientes);
+routerApp.post("/GetClienteByID", appLogin.AutenticaJWT, appClientes.GetClienteByID);
+routerApp.post("/InsertClientes", appLogin.AutenticaJWT, appClientes.InsertClientes);
+routerApp.post("/UpdateClientes", appLogin.AutenticaJWT, appClientes.UpdateClientes);
+routerApp.post("/DeleteClientes", appLogin.AutenticaJWT, appClientes.DeleteClientes);
 
 // Rota Login
 routerApp.post("/Login", appLogin.Login);
