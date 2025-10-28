@@ -36,17 +36,17 @@
               <div class="row">
                 <div class="col-md-4">
                   <div class="form-group">
-                    <label for="dtaVencimento">Data de Vencimento</label>
-                    <input type="date" class="form-control" id="dtaVencimento"
-                      x-model="form.dtaVencimento" x-bind:disabled="disabled">
+                    <label for="dtavencimento">Data de Vencimento</label>
+                    <input type="date" class="form-control" id="dtavencimento"
+                      x-model="form.dtavencimento" x-bind:disabled="disabled">
                   </div>
                 </div>
 
                 <div class="col-md-4">
                   <div class="form-group">
-                    <label for="dtaRecebimento">Data de Recebimento</label>
-                    <input type="date" class="form-control" id="dtaRecebimento"
-                      x-model="form.dtaRecebimento" x-bind:disabled="disabled">
+                    <label for="dtarecebimento">Data de Recebimento</label>
+                    <input type="date" class="form-control" id="dtarecebimento"
+                      x-model="form.dtarecebimento" x-bind:disabled="disabled">
                   </div>
                 </div>
 
@@ -100,10 +100,10 @@
           contaid: "{{data.contaid}}",
           valor: "{{data.valor}}",
           descricao: "{{data.descricao}}",
-          dtaVencimento: "{{data.dtaVencimento}}",
-          dtaRecebimento: "{{data.dtaRecebimento}}",
+          dtavencimento: "{{data.dtavencimento}}",
+          dtarecebimento: "{{data.dtarecebimento}}",
           clienteid: "{{data.clienteid}}",
-          ativo: true
+          removido: false
         },
         message: '',
         messageClass: '',
@@ -163,10 +163,10 @@
           this.form = {
             valor: '',
             descricao: '',
-            dtaVencimento: '',
-            dtaRecebimento: '',
+            dtavencimento: '',
+            dtarecebimento: '',
             clienteid: '',
-            ativo: true
+            removido: false
           };
           this.message = false;
         }
