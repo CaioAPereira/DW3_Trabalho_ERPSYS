@@ -3,8 +3,8 @@ const db = require("../../../database/databaseconfig");
 const getAllContas = async () => {
   return (
     await db.query(
-      "SELECT *,(SELECT descricao from CONTAS where contaid = clientes.contaid)" +
-      "FROM clientes where deleted = false ORDER BY nomeRazaoSocial ASC"
+      "SELECT *, (SELECT nomeRazaoSocial from CLIENTES where clienteid = contas.clienteid)" +
+        "FROM contas WHERE removido = false ORDER BY nomeRazaoSocial ASC",
     )
   ).rows;
 };
@@ -12,8 +12,8 @@ const getAllContas = async () => {
 const getContaByID = async (contaIDPar) => {
   return (
     await db.query(
-      "SELECT *, (SELECT descricao from CONTAS where contaid = clientes.contaid)" +
-      "FROM clientes WHERE clienteid = $1 and deleted = false ORDER BY contas.dataVencimento ASC",
+      "SELECT *, (SELECT nomeRazaoSocial from CLIENTES where clienteid = contas.clienteid)" +
+        "FROM contas WHERE contasid = $1 and removido = false ORDER BY nomeRazaoSocial ASC",
       [contaIDPar]
     )
   ).rows;
@@ -26,13 +26,13 @@ const insertContas = async (contaREGPar) => {
   try {
     linhasAfetadas = (
       await db.query(
-        "INSERT INTO contas " + "values(default, $1, $2, $3, $4, $5)",
+        "INSERT INTO contas (removido, valor, dtaVencimento, dtaRecebimento, descricao, clienteid) " + "values(default, $1, $2, $3, $4, $5)",
         [
           contaREGPar.valor,
           contaREGPar.dtaVencimento,
           contaREGPar.dtaRecebimento,
           contaREGPar.descricao,
-          contaREGPar.ativo,
+          contaREGPar.clienteid
         ]
       )
     ).rowCount;
@@ -55,21 +55,22 @@ const UpdateContas = async (contaREGPar) => {
         "dtaVencimento = $3, " +
         "dtaRecebimento= $4, " +
         "descricao = $5, " +
-        "ativo = $6 " +
-        "clienteid = $7",
-        "WHERE contaid = $1",
+        "removido = $6, " +
+        "clienteid = $7 " +
+        "WHERE contasid = $1",
         [
+          contaREGPar.contasid,
           contaREGPar.valor,
           contaREGPar.dtaVencimento,
           contaREGPar.dtaRecebimento,
           contaREGPar.descricao,
-          contaREGPar.ativo,
+          contaREGPar.removido,
           contaREGPar.clienteid,
         ]
       )
     ).rowCount;
   } catch (error) {
-    msg = "[mdlContas|insertContas] " + error.detail;
+    msg = "[mdlContas|updateContas] " + error.detail;
     linhasAfetadas = -1;
   }
 
@@ -83,8 +84,8 @@ const DeleteContas = async (contaREGPar) => {
   try {
     linhasAfetadas = (
       await db.query(
-        "UPDATE contas SET " + "deleted = true " + "WHERE contaid = $1",
-        [contaREGPar.contaid]
+        "UPDATE contas SET " + "removido = true " + "WHERE contasid = $1",
+        [contaREGPar.contasid]
       )
     ).rowCount;
   } catch (error) {

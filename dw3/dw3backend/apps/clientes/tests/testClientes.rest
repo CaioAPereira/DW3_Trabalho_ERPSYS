@@ -13,7 +13,7 @@ content-type: application/json
 @username = {{loginAutenticado.response.body.$.username}}  
 
 
-### teste de buscar todos os alunos  
+### teste de buscar todos os clientes 
 GET http://localhost:40000/GetAllClientes HTTP/1.1  
 content-type: application/json  
 Authorization: Bearer {{accessToken}}  
@@ -25,46 +25,43 @@ Authorization: Bearer {{accessToken}}
 ### teste de buscar cliente por ID  
 POST http://localhost:40000/GetClienteByID HTTP/1.1  
 content-type: application/json  
-//Authorization:  {{accessToken}}  
+Authorization: Bearer {{accessToken}}   
 
 {     
-    "cursoid": 4  
+    "clienteid": 4 
 }  
 
 ### teste de inserção de cliente  
 POST http://localhost:40000/InsertClientes HTTP/1.1  
 content-type: application/json  
-//Authorization: Bearer  
- eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2NzM0ODE2NDEsInVzZXJuYW1lIjoicXdlIn0.LRKs8uvt-SJ9E9dMGYRkCs7HhMDlqVmwap_zcaoONeQ  
+Authorization:  Bearer {{accessToken}} 
   
-{      
-    "clienteid": 0,  
-    "documento": "91993847374",   
+  
+{   
     "nomeRazaoSocial": "Rogerio",  
-    "email": "Rogerio@gmail.com",  
-    "ativo": true      
+    "cpf_cnpj": "91993847374",   
+    "email": "Rogerio@gmail.com" 
+      
 }  
 
-### teste de atualização de aluno  
+### teste de atualização de cliente  
 POST http://localhost:40000/UpdateClientes HTTP/1.1  
 content-type: application/json  
-//Authorization: Bearer  
- eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2NzM0ODE2NDEsInVzZXJuYW1lIjoicXdlIn0.LRKs8uvt-SJ9E9dMGYRkCs7HhMDlqVmwap_zcaoONeQ  
+Authorization: Bearer {{accessToken}}
 
 {      
-    "clienteid": 2,  
-    "documento": "99988889999",  
-    "nomeRazaoSocial": "Roberto",  
-    "email": "rh@gmail.com",  
-    "ativo": true   
+    "clienteid": 3,
+    "nomeRazaoSocial": "Rogerinho", 
+    "cpf_cnpj": "99988889999",  
+    "email": "djrogerin@gmail.com",  
+    "removido": false   
 }  
 
-### teste de atualização de aluno  
+### teste de deleção de cliente 
 POST http://localhost:40000/DeleteClientes HTTP/1.1  
 content-type: application/json  
-//Authorization: Bearer  
- eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2NzM0ODE2NDEsInVzZXJuYW1lIjoicXdlIn0.LRKs8uvt-SJ9E9dMGYRkCs7HhMDlqVmwap_zcaoONeQ  
+Authorization: Bearer {{accessToken}}
 
 {      
-    "clienteid": 2    
+    "clienteid": 3    
 }  

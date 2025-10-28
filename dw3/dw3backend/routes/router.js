@@ -2,7 +2,7 @@ const express = require("express");
 const routerApp = express.Router();
 
 const appContas = require("../apps/contas/controller/ctlContas");
-const appClientes = require("../apps/contasssss/controller/ctlClientes");
+const appClientes = require("../apps/clientes/controller/ctlClientes");
 const appLogin = require("../apps/login/controller/ctlLogin");
 
 // middleware that is specific to this router
@@ -16,7 +16,7 @@ routerApp.get("/", (req, res) => {
 
 //Rotas de contas
 routerApp.get("/getAllContas", appLogin.AutenticaJWT, appContas.getAllContas);
-routerApp.post("/getAlunoByID", appLogin.AutenticaJWT, appContas.getContaByID);
+routerApp.post("/getContaByID", appLogin.AutenticaJWT, appContas.getContaByID);
 routerApp.post("/insertContas", appLogin.AutenticaJWT, appContas.insertContas);
 routerApp.post("/updateContas", appLogin.AutenticaJWT, appContas.updateContas);
 routerApp.post("/DeleteContas", appLogin.AutenticaJWT, appContas.DeleteContas);
