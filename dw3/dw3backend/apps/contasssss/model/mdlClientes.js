@@ -3,17 +3,17 @@ const db = require("../../../database/databaseconfig");
 const GetAllClientes = async () => {
   return (
     await db.query(
-      "SELECT * " + "FROM clientes where removido = false ORDER BY nomeRazaoSocial ASC"
+      "SELECT * " + "FROM clientes where ativo = true ORDER BY nomeRazaoSocial ASC"
     )
   ).rows;
 };
 
 const GetClienteByID = async (clienteIDPar) => {
-  return ( 
+  return (
     await db.query(
       "SELECT * " +
-      "FROM clientes WHERE clienteid = $1 and removido = false ORDER BY nomeRazaoSocial ASC",
-      [clienteIDPar]      
+      "FROM cliente WHERE clienteid = $1 and ativo = true ORDER BY nomeRazaoSocial ASC",
+      [clienteIDPar]
     )
   ).rows;
 };
@@ -25,11 +25,12 @@ const InsertClientes = async (registroPar) => {
   try {
     linhasAfetadas = (
       await db.query(
-        "INSERT INTO clientes (Removido, NomeRazaoSocial, CPF_CNPJ, Email) " + "values(default, $1, $2, $3)",
+        "INSERT INTO clientes " + "values(default, $1, $2, $3, $4)",
         [
+          registroPar.documento,
           registroPar.nomeRazaoSocial,
-          registroPar.cpf_cnpj,
           registroPar.email,
+          registroPar.ativo,
         ]
       )
     ).rowCount;
@@ -48,17 +49,17 @@ const UpdateClientes = async (registroPar) => {
     linhasAfetadas = (
       await db.query(
         "UPDATE clientes SET " +
-        "cpf_cnpj = $2, " +
+        "documento = $2, " +
         "nomeRazaoSocial = $3, " +
         "email = $4, " +
-        "removido = $5 " +
+        "ativo = $5 " +
         "WHERE clienteid = $1",
         [
           registroPar.clienteid,
-          registroPar.cpf_cnpj,
+          registroPar.documento,
           registroPar.nomeRazaoSocial,
           registroPar.email,
-          registroPar.removido,
+          registroPar.ativo,
         ]
       )
     ).rowCount;
@@ -78,8 +79,8 @@ const DeleteClientes = async (registroPar) => {
   try {
     linhasAfetadas = (
       await db.query(
-        "UPDATE clientes SET " + "removido = true " + "WHERE clienteid = $1",
-        [registroPar.clienteid]
+        "UPDATE clientes SET " + "ativo = false " + "WHERE clienteid = $1",
+        [registroPar.cursoid]
       )
     ).rowCount;
   } catch (error) {

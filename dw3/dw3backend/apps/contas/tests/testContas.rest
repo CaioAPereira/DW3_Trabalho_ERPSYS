@@ -20,11 +20,13 @@ content-type: application/json
 Authorization: Bearer {{accessToken}}
 
 {    
+    "contaid": 0,
     "valor": "100",
     "dtaVencimento": "10/10/2025",
     "dtaRecebimento": "10/09/2025",
     "descricao": "conta de luz",
-    "clienteid": 3
+    "clienteid": 2,
+    "ativo": true
 }
 
 ### teste de buscar todos os contas
@@ -42,7 +44,7 @@ content-type: application/json
 Authorization: Bearer {{accessToken}}
 
 {    
-    "contaid": 2
+    "contaid": 1
 }
 
 
@@ -50,23 +52,23 @@ Authorization: Bearer {{accessToken}}
 ### teste de atualização de conta
 POST http://localhost:40000/updateContas HTTP/1.1
 content-type: application/json
-Authorization: Bearer {{accessToken}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InF3ZSIsImlhdCI6MTY5MTQzNTg3MSwiZXhwIjoxNjkxNDM2NDcxfQ.hAh0VyRfEXvYmhunlJALD-qda8pYr2zzAHobn1yua20
 
 {    
-    "contasid": 3,
+    "contaid": 3,
     "valor": "180",
     "dtaVencimento": "11/10/2025",
     "dtaRecebimento": "10/08/2025",
     "descricao": "Conta de luz com juros",
-    "clienteid": 3,
-    "removido": false
+    "clienteid": 2,
+    "ativo": true
 }
 
 ### teste de atualização de cliente
 POST http://localhost:40000/DeleteContas HTTP/1.1
 content-type: application/json
-Authorization: Bearer {{accessToken}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InF3ZSIsImlhdCI6MTY5MTQ5MDg3NCwiZXhwIjoxNjkxNDkxNDc0fQ.1ABhMgWYm8gGKy7q90GOPQpNoY5M1LLzpCltKxFjcEo
 
 {    
-    "contasid": 3  
+    "contaid": 3  
 }

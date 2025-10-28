@@ -1,4 +1,4 @@
-const mdlClientes = require("../model/mdlClientes");
+const mdlContas = require("../model/mdlClientes");
 
 const GetAllClientes = (req, res) =>
   (async () => {
@@ -8,7 +8,7 @@ const GetAllClientes = (req, res) =>
 
 const GetClienteByID = (req, res) =>
   (async () => {
-    const clienteID = parseInt(req.body.clienteid);
+    const clienteID = parseInt(req.body.contaid);
     let registro = await mdlClientes.GetClienteByID(clienteID);
 
     res.json({ status: "ok", registro: registro });

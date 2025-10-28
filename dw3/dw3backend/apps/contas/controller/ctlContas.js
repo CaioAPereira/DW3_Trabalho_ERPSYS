@@ -1,4 +1,4 @@
-const mdlContas = require("../model/mdlContas");
+const mdlClientes = require("../model/mdlContas");
 
 const getAllContas = (req, res) =>
   (async () => {
@@ -15,7 +15,7 @@ const getAllContas = (req, res) =>
 const getContaByID = (req, res) =>
   (async () => {
     const contaID = parseInt(req.body.contaid);
-    let registro = await mdlContas.getContaByID(contaID);
+    let registro = await mdlClientes.getContaByID(contaID);
 
 
     res.json({ status: "ok", "registro": registro });
@@ -31,7 +31,7 @@ const insertContas = (request, res) =>
 
 const updateContas = (request, res) =>
   (async () => {
-    const contaREG = request.body;    
+    const contaREG = request.body;
     let { msg, linhasAfetadas } = await mdlContas.UpdateContas(contaREG);
     res.json({ "status": msg, "linhasAfetadas": linhasAfetadas });
   })();
