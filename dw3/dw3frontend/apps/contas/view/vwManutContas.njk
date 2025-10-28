@@ -49,10 +49,12 @@
                     </td>
                     <td>{{ reg.contaid }}</td>
                     <td>{{ reg.descricao }}</td>
-                    <td>{{ reg.valor | floatformat(2, 'pt_BR') }}</td>
-                    <td>{{ reg.dtavencimento }}</td>
-                    <td>{{ reg.dtarecebimento }}</td>
-                    <td>{{ reg.nomeRazaoSocial }}</td>
+                    
+                    <td>{{ reg.valor | round(2) }}</td>
+                    
+                    <td>{{ reg.datavencimento }}</td>
+                    <td>{{ reg.datarecebimento }}</td>
+                    <td>{{ reg.nomerazaosocial }}</td>
                   </tr>
                 {% endfor %}
               </tbody>

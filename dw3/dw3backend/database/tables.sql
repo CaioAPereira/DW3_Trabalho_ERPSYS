@@ -44,7 +44,7 @@ CREATE TABLE contas (
 
     -- Definição da Chave Estrangeira
     CONSTRAINT FK_Contas_Cliente FOREIGN KEY (ClienteID)
-        REFERENCES cliente (clienteID)
+        REFERENCES clientes (clienteid)
         ON DELETE RESTRICT -- Opção comum: impede a exclusão de um cliente que tenha contas associadas
         ON UPDATE CASCADE   -- Opção comum: se o ID do cliente mudar (raro), atualiza na tabela contas
 );

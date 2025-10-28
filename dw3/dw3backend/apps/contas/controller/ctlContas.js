@@ -24,9 +24,25 @@ const getContaByID = (req, res) =>
 const insertContas = (request, res) =>
   (async () => {
     //@ Atenção: aqui já começamos a utilizar a variável msg para retornar erros de banco de dados.
-    const contaREG = request.body;
-    let { msg, linhasAfetadas } = await mdlContas.insertContas(contaREG);
-    res.json({ "status": msg, "linhasAfetadas": linhasAfetadas });
+    try {
+      const contaREG = request.body;
+      let { msg, linhasAfetadas } = await mdlContas.insertContas(contaREG);
+
+      // Define um status claro ('ok' ou 'erro') para o frontend verificar
+      let status = (msg === "ok") ? "ok" : "erro";
+
+      // Retorna 'status' (para o frontend checar) e 'msg' (com o detalhe)
+      res.json({ "status": status, "msg": msg, "linhasAfetadas": linhasAfetadas });
+
+    } catch (error) {
+      // Este catch pega erros graves (ex: mdlContas não foi importado, etc)
+      console.error("[ctlContas|insertContas] Erro inesperado: ", error.message);
+      res.json({
+        "status": "erro",
+        "msg": "Erro fatal no controlador: " + error.message,
+        "linhasAfetadas": -1
+      });
+    }
   })();
 
 const updateContas = (request, res) =>

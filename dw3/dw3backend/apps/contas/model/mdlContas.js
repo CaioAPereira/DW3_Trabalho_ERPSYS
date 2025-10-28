@@ -3,8 +3,9 @@ const db = require("../../../database/databaseconfig");
 const getAllContas = async () => {
   return (
     await db.query(
-      "SELECT *, (SELECT nomeRazaoSocial from CLIENTES where clienteid = contas.clienteid)" +
-        "FROM contas WHERE removido = false ORDER BY nomeRazaoSocial ASC",
+      // CORRIGIDO: PostgreSQL usa nomes em minúsculo, a menos que sejam criados com ""
+      "SELECT *, (SELECT nomerazaosocial from clientes where clienteid = contas.clienteid)" +
+        "FROM contas WHERE removido = false ORDER BY contasid ASC"
     )
   ).rows;
 };
@@ -12,32 +13,35 @@ const getAllContas = async () => {
 const getContaByID = async (contaIDPar) => {
   return (
     await db.query(
-      "SELECT *, (SELECT nomeRazaoSocial from CLIENTES where clienteid = contas.clienteid)" +
-        "FROM contas WHERE contasid = $1 and removido = false ORDER BY nomeRazaoSocial ASC",
+      // CORRIGIDO: 'nomerazaosocial' minúsculo
+      "SELECT *, (SELECT nomerazaosocial from clientes where clienteid = contas.clienteid)" +
+        "FROM contas WHERE contasid = $1 and removido = false",
       [contaIDPar]
     )
   ).rows;
 };
 
 const insertContas = async (contaREGPar) => {
-  //@ Atenção: aqui já começamos a utilizar a variável msg para retornor erros de banco de dados.
   let linhasAfetadas;
   let msg = "ok";
   try {
+    // TRATAMENTO DE DADOS: Converte strings vazias ou nulos do frontend para 'null' do banco
+    const valor = contaREGPar.valor || null;
+    const dtavencimento = contaREGPar.dtavencimento || null;
+    const dtarecebimento = contaREGPar.dtarecebimento || null;
+    const descricao = contaREGPar.descricao || null;
+    const clienteid = contaREGPar.clienteid || null;
+
     linhasAfetadas = (
       await db.query(
-        "INSERT INTO contas (removido, valor, dtaVencimento, dtaRecebimento, descricao, clienteid) " + "values(default, $1, $2, $3, $4, $5)",
-        [
-          contaREGPar.valor,
-          contaREGPar.dtaVencimento,
-          contaREGPar.dtaRecebimento,
-          contaREGPar.descricao,
-          contaREGPar.clienteid
-        ]
+        // CORRIGIDO: Usei os nomes de colunas em minúsculo (como o PostgreSQL usa)
+        "INSERT INTO contas (removido, valor, datavencimento, datarecebimento, descricao, clienteid) " +
+          "values(default, $1, $2, $3, $4, $5)",
+        [valor, dtavencimento, dtarecebimento, descricao, clienteid]
       )
     ).rowCount;
   } catch (error) {
-    msg = "[mdlContas|insertContas] " + error.detail;
+    msg = "[mdlContas|insertContas] " + error.message;
     linhasAfetadas = -1;
   }
 
@@ -48,29 +52,34 @@ const UpdateContas = async (contaREGPar) => {
   let linhasAfetadas;
   let msg = "ok";
   try {
+    // TRATAMENTO DE DADOS
+    const dtarecebimento = contaREGPar.dtarecebimento || null;
+    const clienteid = contaREGPar.clienteid || null;
     linhasAfetadas = (
       await db.query(
+        // CORRIGIDO: Nomes de colunas em minúsculo
         "UPDATE contas SET " +
-        "valor = $2, " +
-        "dtaVencimento = $3, " +
-        "dtaRecebimento= $4, " +
-        "descricao = $5, " +
-        "removido = $6, " +
-        "clienteid = $7 " +
-        "WHERE contasid = $1",
+          "valor = $2, " +
+          "datavencimento = $3, " +
+          "datarecebimento= $4, " +
+          "descricao = $5, " +
+          "removido = $6, " +
+          "clienteid = $7 " +
+          "WHERE contasid = $1",
         [
           contaREGPar.contasid,
           contaREGPar.valor,
-          contaREGPar.dtaVencimento,
-          contaREGPar.dtaRecebimento,
+          contaREGPar.dtavencimento,
+          dtarecebimento, // tratado
           contaREGPar.descricao,
           contaREGPar.removido,
-          contaREGPar.clienteid,
+          clienteid, // tratado
         ]
       )
     ).rowCount;
   } catch (error) {
-    msg = "[mdlContas|updateContas] " + error.detail;
+    // CORRIGIDO: Usar .message
+    msg = "[mdlContas|updateContas] " + error.message;
     linhasAfetadas = -1;
   }
 
@@ -89,7 +98,8 @@ const DeleteContas = async (contaREGPar) => {
       )
     ).rowCount;
   } catch (error) {
-    msg = "[mdlContas|insertContas] " + error.detail;
+    // CORRIGIDO: Usar .message e nome da função
+    msg = "[mdlContas|DeleteContas] " + error.message;
     linhasAfetadas = -1;
   }
 

@@ -34,15 +34,15 @@
               <div class="row">
                 <div class="col-md-4">
                   <div class="form-group">
-                    <label for="dtaVencimento">Data de Vencimento</label>
-                    <input type="date" class="form-control" id="dtaVencimento" x-model="form.dtaVencimento" required>
+                    <label for="dtavencimento">Data de Vencimento</label>
+                    <input type="date" class="form-control" id="dtavencimento" x-model="form.dtavencimento" required>
                   </div>
                 </div>
 
                 <div class="col-md-4">
                   <div class="form-group">
-                    <label for="dtaRecebimento">Data de Recebimento</label>
-                    <input type="date" class="form-control" id="dtaRecebimento" x-model="form.dtaRecebimento">
+                    <label for="dtarecebimento">Data de Recebimento</label>
+                    <input type="date" class="form-control" id="dtarecebimento" x-model="form.dtarecebimento">
                   </div>
                 </div>
 
@@ -52,7 +52,7 @@
                     <select class="form-select" id="clienteid" x-model="form.clienteid" name="clienteid" required>
                       <option value="">Selecione um cliente</option>
                       {% for cli in clientes %}
-                        <option value="{{ cli.clienteid }}">{{ cli.nomeRazaoSocial }}</option>
+                        <option value="{{ cli.clienteid }}">{{ cli.nomerazaosocial }}</option>
                       {% endfor %}
                     </select>
                   </div>
@@ -89,11 +89,11 @@
       return {
         form: {
           valor: '',
-          dtaVencimento: '',
-          dtaRecebimento: '',
+          dtavencimento: '',
+          dtarecebimento: '',
           descricao: '',
           clienteid: '',
-          ativo: true
+          removido: false
         },
         message: '',
         messageClass: '',
@@ -117,7 +117,7 @@
               alert("Conta cadastrada com sucesso!");
               this.resetForm();
             } else {
-              const errorData = result.status || result.msg;
+              const errorData = result.msg;
               this.message = `Erro! Não foi possível cadastrar a conta: ${errorData}`;
               this.messageClass = 'alert alert-danger';
             }
@@ -130,11 +130,11 @@
         resetForm() {
           this.form = {
             valor: '',
-            dtaVencimento: '',
-            dtaRecebimento: '',
+            dtavencimento: '',
+            dtarecebimento: '',
             descricao: '',
             clienteid: '',
-            ativo: true
+            removido: false
           };
           this.message = false;
         }
