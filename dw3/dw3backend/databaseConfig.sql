@@ -26,11 +26,10 @@ create table IF NOT EXISTS contas (
     ativo boolean DEFAULT true
 );
 
-insert into contas values 
-    (default, 150.00, '2025-09-09', '2025-08-09', 'conta de luz', 
-        (SELECT clienteid from CLIENTES where contasid = 1)),
-    (default, 650.00, '2025-09-01', '2025-08-01', 'aluguel', 
-        (SELECT clienteid from CLIENTES where contasid = 4)),
+INSERT INTO contas (valor, dtaVencimento, dtaRecebimento, descricao, clienteid)
+VALUES
+    (150.00, '2025-09-09', '2025-08-09', 'conta de luz', 1),
+    (650.00, '2025-09-01', '2025-08-01', 'aluguel', 2)
 ON CONFLICT DO NOTHING;
 
 create table IF NOT EXISTS usuarios (
