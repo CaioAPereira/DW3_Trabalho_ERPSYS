@@ -12,24 +12,30 @@ const manutContas = async (req, res) =>
     const token = req.session.token;
 
     try {
-      const resp = await axios.get(process.env.SERVIDOR_DW3Back + "/getAllContas", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
+      const resp = await axios.get(
+        process.env.SERVIDOR_DW3Back + "/getAllContas",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         }
-      });
+      );
 
-      const dadosFormatados = resp.data.registro.map(conta => {
-        // Formata Vencimento (usando 'datavencimento' minúsculo)
-        if (conta.datavencimento) {
-          conta.datavencimento = moment(conta.datavencimento).format("DD/MM/YYYY");
-        }
-        // Formata Recebimento (se existir)
-        if (conta.datarecebimento) {
-          conta.datarecebimento = moment(conta.datarecebimento).format("DD/MM/YYYY");
-        }
-        return conta;
-      });
+      const dadosFormatados = resp.data.registro.map((conta) => {
+        // Formata Vencimento (usando 'datavencimento' minúsculo)
+        if (conta.datavencimento) {
+          conta.datavencimento = moment(conta.datavencimento).format(
+            "DD/MM/YYYY"
+          );
+        } // Formata Recebimento (se existir)
+        if (conta.datarecebimento) {
+          conta.datarecebimento = moment(conta.datarecebimento).format(
+            "DD/MM/YYYY"
+          );
+        }
+        return conta;
+      });
 
       res.render("contas/view/vwManutContas.njk", {
         title: "Manutenção de Contas",
@@ -71,8 +77,8 @@ const insertContas = async (req, res) =>
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`
-            }
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
 
@@ -84,7 +90,10 @@ const insertContas = async (req, res) =>
           userName: req.session.userName,
         });
       } catch (error) {
-        console.error("[ctlContas|insertContas-GET] Erro ao buscar clientes:", error.message);
+        console.error(
+          "[ctlContas|insertContas-GET] Erro ao buscar clientes:",
+          error.message
+        );
         return res.render("contas/view/vwFCrContas.njk", {
           title: "Cadastro de Contas",
           data: null,
@@ -93,20 +102,23 @@ const insertContas = async (req, res) =>
           userName: req.session.userName,
         });
       }
-
     } else {
       // POST
       const regData = req.body;
       const token = req.session.token;
 
       try {
-        const response = await axios.post(process.env.SERVIDOR_DW3Back + "/insertContas", regData, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
-          },
-          timeout: 5000,
-        });
+        const response = await axios.post(
+          process.env.SERVIDOR_DW3Back + "/insertContas",
+          regData,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            timeout: 5000,
+          }
+        );
 
         res.json({
           status: response.data.status,
@@ -115,7 +127,10 @@ const insertContas = async (req, res) =>
           erro: null,
         });
       } catch (error) {
-        console.error("[ctlContas|insertContas] Erro ao inserir conta:", error.message);
+        console.error(
+          "[ctlContas|insertContas] Erro ao inserir conta:",
+          error.message
+        );
         res.json({
           status: "Error",
           msg: error.message,
@@ -144,13 +159,12 @@ const ViewContas = async (req, res) =>
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
       if (response.data.status === "ok") {
-        
         // @ Correção: Adicionado Try...Catch para a busca de clientes
         try {
           const clientes = await axios.get(
@@ -158,14 +172,19 @@ const ViewContas = async (req, res) =>
             {
               headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-              }
+                Authorization: `Bearer ${token}`,
+              },
             }
           );
 
-          response.data.registro[0].dtavencimento = moment(response.data.registro[0].dtavencimento).format("DD/MM/YYYY");
-          if (response.data.registro[0].dtarecebimento) { // Evita erro se for nulo
-            response.data.registro[0].dtarecebimento = moment(response.data.registro[0].dtarecebimento).format("DD/MM/YYYY");
+          response.data.registro[0].dtavencimento = moment(
+            response.data.registro[0].dtavencimento
+          ).format("DD/MM/YYYY");
+          if (response.data.registro[0].dtarecebimento) {
+            // Evita erro se for nulo
+            response.data.registro[0].dtarecebimento = moment(
+              response.data.registro[0].dtarecebimento
+            ).format("DD/MM/YYYY");
           }
 
           res.render("contas/view/vwFRUDrContas.njk", {
@@ -176,9 +195,11 @@ const ViewContas = async (req, res) =>
             userName: userName,
             erro: null, // Adicionado para consistência
           });
-
         } catch (errorClientes) {
-          console.error("[ctlContas|ViewContas] Erro ao buscar clientes:", errorClientes.message);
+          console.error(
+            "[ctlContas|ViewContas] Erro ao buscar clientes:",
+            errorClientes.message
+          );
           // Renderiza a página mesmo assim, mas com erro sobre os clientes
           res.render("contas/view/vwFRUDrContas.njk", {
             title: "Visualização de Conta",
@@ -189,13 +210,15 @@ const ViewContas = async (req, res) =>
             erro: "Erro ao carregar a lista de clientes.", // Informa o erro
           });
         }
-        
       } else {
         console.log("[ctlContas|ViewContas] Conta não localizada!");
         res.json({ status: "Conta não localizada!" }); // Resposta mais clara
       }
     } catch (error) {
-      console.error("[ctlContas|ViewContas] Erro ao buscar conta:", error.message);
+      console.error(
+        "[ctlContas|ViewContas] Erro ao buscar conta:",
+        error.message
+      );
       res.json({ status: "Erro ao buscar conta!" });
     }
   })();
@@ -218,13 +241,12 @@ const UpdateContas = async (req, res) =>
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`
-            }
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
 
         if (response.data.status === "ok") {
-
           // @ Correção: Adicionado Try...Catch para a busca de clientes
           try {
             const clientes = await axios.get(
@@ -232,14 +254,19 @@ const UpdateContas = async (req, res) =>
               {
                 headers: {
                   "Content-Type": "application/json",
-                  Authorization: `Bearer ${token}`
-                }
+                  Authorization: `Bearer ${token}`,
+                },
               }
             );
 
-            response.data.registro[0].dtavencimento = moment(response.data.registro[0].dtavencimento).format("DD/MM/YYYY");
-            if (response.data.registro[0].dtarecebimento) { // Evita erro se for nulo
-              response.data.registro[0].dtarecebimento = moment(response.data.registro[0].dtarecebimento).format("DD/MM/YYYY");
+            response.data.registro[0].dtavencimento = moment(
+              response.data.registro[0].dtavencimento
+            ).format("DD/MM/YYYY");
+            if (response.data.registro[0].dtarecebimento) {
+              // Evita erro se for nulo
+              response.data.registro[0].dtarecebimento = moment(
+                response.data.registro[0].dtarecebimento
+              ).format("DD/MM/YYYY");
             }
 
             res.render("contas/view/vwFRUDrContas.njk", {
@@ -250,9 +277,11 @@ const UpdateContas = async (req, res) =>
               userName: userName,
               erro: null, // Adicionado para consistência
             });
-
           } catch (errorClientes) {
-            console.error("[ctlContas|UpdateContas-GET] Erro ao buscar clientes:", errorClientes.message);
+            console.error(
+              "[ctlContas|UpdateContas-GET] Erro ao buscar clientes:",
+              errorClientes.message
+            );
             // Renderiza a página mesmo assim, mas com erro sobre os clientes
             res.render("contas/view/vwFRUDrContas.njk", {
               title: "Atualização de Conta",
@@ -263,7 +292,6 @@ const UpdateContas = async (req, res) =>
               erro: "Erro ao carregar a lista de clientes.", // Informa o erro
             });
           }
-          
         } else {
           console.log("[ctlContas|UpdateContas] Conta não localizada!");
           // Seria bom redirecionar ou mostrar erro
@@ -278,7 +306,7 @@ const UpdateContas = async (req, res) =>
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`
+              Authorization: `Bearer ${token}`,
             },
             timeout: 5000,
           }
@@ -292,7 +320,10 @@ const UpdateContas = async (req, res) =>
         });
       }
     } catch (error) {
-      console.error("[ctlContas|UpdateContas] Erro ao atualizar conta:", error.message);
+      console.error(
+        "[ctlContas|UpdateContas] Erro ao atualizar conta:",
+        error.message
+      );
       res.json({
         status: "Error",
         msg: error.message,
@@ -317,7 +348,7 @@ const DeleteContas = async (req, res) =>
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
           timeout: 5000,
         }
@@ -330,7 +361,10 @@ const DeleteContas = async (req, res) =>
         erro: null,
       });
     } catch (error) {
-      console.error("[ctlContas|DeleteContas] Erro ao deletar conta:", error.message);
+      console.error(
+        "[ctlContas|DeleteContas] Erro ao deletar conta:",
+        error.message
+      );
       res.json({
         status: "Error",
         msg: error.message,
@@ -340,7 +374,6 @@ const DeleteContas = async (req, res) =>
     }
   })();
 
-
 // =======================================================================
 // @ Exportação dos módulos
 // =======================================================================
@@ -349,5 +382,5 @@ module.exports = {
   insertContas,
   ViewContas,
   UpdateContas,
-  DeleteContas
+  DeleteContas,
 };

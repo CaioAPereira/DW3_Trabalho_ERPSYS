@@ -19,7 +19,6 @@ var rtClientes = require('./routes/rtClientes');
 jwtchave = process.env.JWTCHAVE;
 
 
-
 var app = express();
 
 nunjucks.configure('apps', {
