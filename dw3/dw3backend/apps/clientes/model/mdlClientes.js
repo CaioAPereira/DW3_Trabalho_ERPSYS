@@ -3,38 +3,45 @@ const db = require("../../../database/databaseconfig");
 const GetAllClientes = async () => {
   return (
     await db.query(
-      "SELECT * " + "FROM clientes where removido = false ORDER BY nomeRazaoSocial ASC"
+      // CORRIGIDO: Coluna 'nomerazaosocial' em minúsculo
+      "SELECT * FROM clientes where removido = false ORDER BY nomerazaosocial ASC"
     )
   ).rows;
 };
 
 const GetClienteByID = async (clienteIDPar) => {
-  return ( 
+  return (
     await db.query(
+      // CORRIGIDO: Coluna 'nomerazaosocial' em minúsculo
       "SELECT * " +
-      "FROM clientes WHERE clienteid = $1 and removido = false ORDER BY nomeRazaoSocial ASC",
-      [clienteIDPar]      
+        "FROM clientes WHERE clienteid = $1 and removido = false ORDER BY nomerazaosocial ASC",
+      [clienteIDPar]
     )
   ).rows;
 };
 
 const InsertClientes = async (registroPar) => {
-  //@ Atenção: aqui já começamos a utilizar a variável msg para retornor erros de banco de dados.
   let linhasAfetadas;
   let msg = "ok";
   try {
+    // Tratamento para garantir que NOT NULL não falhe
+    const nome = registroPar.nomerazaosocial || null;
+    const cpf = registroPar.cpf_cnpj || null;
+
     linhasAfetadas = (
       await db.query(
-        "INSERT INTO clientes (Removido, NomeRazaoSocial, CPF_CNPJ, Email) " + "values(default, $1, $2, $3)",
+        // CORRIGIDO: Colunas em minúsculo
+        "INSERT INTO clientes (removido, nomerazaosocial, cpf_cnpj, email) " +
+          "values(default, $1, $2, $3)",
         [
-          registroPar.nomeRazaoSocial,
-          registroPar.cpf_cnpj,
-          registroPar.email,
+          nome,
+          cpf,
+          registroPar.email, // email pode ser nulo pela sua tabela
         ]
       )
     ).rowCount;
   } catch (error) {
-    msg = "[mdlClientes|insertClientes] " + error.detail;
+    msg = "[mdlClientes|insertClientes] " + error.message;
     linhasAfetadas = -1;
   }
 
@@ -45,31 +52,35 @@ const UpdateClientes = async (registroPar) => {
   let linhasAfetadas;
   let msg = "ok";
   try {
+    // Tratamento para garantir que NOT NULL não falhe
+    const nome = registroPar.nomerazaosocial || null;
+    const cpf = registroPar.cpf_cnpj || null;
+
     linhasAfetadas = (
       await db.query(
+        // CORRIGIDO: Colunas em minúsculo
         "UPDATE clientes SET " +
-        "cpf_cnpj = $2, " +
-        "nomeRazaoSocial = $3, " +
-        "email = $4, " +
-        "removido = $5 " +
-        "WHERE clienteid = $1",
+          "cpf_cnpj = $2, " +
+          "nomerazaosocial = $3, " +
+          "email = $4, " +
+          "removido = $5 " +
+          "WHERE clienteid = $1",
         [
           registroPar.clienteid,
-          registroPar.cpf_cnpj,
-          registroPar.nomeRazaoSocial,
+          cpf,
+          nome, // CORRIGIDO: Lendo a propriedade 'nomerazaosocial' (minúsculo)
           registroPar.email,
           registroPar.removido,
         ]
       )
     ).rowCount;
   } catch (error) {
-    msg = "[mdlClientes|UpdateClientes] " + error.detail;
+    msg = "[mdlClientes|UpdateClientes] " + error.message;
     linhasAfetadas = -1;
   }
 
   return { msg, linhasAfetadas };
 };
-
 
 const DeleteClientes = async (registroPar) => {
   let linhasAfetadas;
@@ -83,13 +94,12 @@ const DeleteClientes = async (registroPar) => {
       )
     ).rowCount;
   } catch (error) {
-    msg = "[mdlClientes|DeleteClientes] " + error.detail;
+    msg = "[mdlClientes|DeleteClientes] " + error.message;
     linhasAfetadas = -1;
   }
 
   return { msg, linhasAfetadas };
 };
-
 
 module.exports = {
   GetAllClientes,

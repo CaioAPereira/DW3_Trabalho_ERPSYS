@@ -26,8 +26,8 @@
 
               <div class="col-md-5">
                 <div class="form-group">
-                  <label for="nomeRazaoSocial">Nome / Razão Social</label>
-                  <input type="text" class="form-control" id="nomeRazaoSocial" x-model="form.nomeRazaoSocial" x-bind:disabled="disabled">
+                  <label for="nomerazaosocial">Nome / Razão Social</label>
+                  <input type="text" class="form-control" id="nomerazaosocial" x-model="form.nomerazaosocial" x-bind:disabled="disabled">
                 </div>
               </div>
 
@@ -39,17 +39,10 @@
               </div>
             </div>
 
-            <div class="form-group col-md-6 mt-3">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="removido" x-model="form.removido" x-bind:disabled="disabled">
-                <label class="form-check-label" for="removido">
-                  Removido (Inativo)
-                </label>
-              </div>
-            </div>
+
 
             <button type="button" @click="updateForm()" class="btn btn-primary mt-4">Salvar</button>
-            <button type="button" @click="deleteForm()" x-show="!disabled" class="btn btn-danger mt-4">Inativar (Remover)</button>
+            <button type="button" @click="deleteForm()" x-show="!disabled" class="btn btn-danger mt-4">Remover</button>
             <a href="/clientes/manutClientes" class="btn btn-info mt-4 ml-2" role="button" aria-disabled="true">Retornar</a>
           </form>
 
@@ -84,7 +77,7 @@
       form: {
         clienteid: "{{data.clienteid}}",
         cpf_cnpj: "{{data.cpf_cnpj}}", // Campo atualizado
-        nomeRazaoSocial: "{{data.nomeRazaoSocial}}",
+        nomerazaosocial: "{{data.nomerazaosocial}}",
         email: "{{data.email}}",
         removido: {{data.removido | dump | safe }} // Campo atualizado
       },
@@ -106,7 +99,7 @@
           if (result.status == "ok") {
             alert("Cliente atualizado com sucesso");
           } else {
-            const errorData = result.status;
+            const errorData = result.msg;
             this.message = `Erro! Não foi possível atualizar os dados do cliente devido ao erro: ${errorData}`;
             this.messageClass = 'alert alert-danger';
           }
@@ -134,7 +127,7 @@
             window.location.href = "/clientes/manutClientes";
 
           } else {
-            const errorData = result.status;
+            const errorData = result.msg;
             this.message = `Erro! Não foi possível remover o cliente devido ao erro: ${errorData}`;
             this.messageClass = 'alert alert-danger';
           }
@@ -148,7 +141,7 @@
       resetForm() {
         this.form = {
           cpf_cnpj: '',
-          nomeRazaoSocial: '',
+          nomerazaosocial: '',
           email: '',
           removido: false
         };

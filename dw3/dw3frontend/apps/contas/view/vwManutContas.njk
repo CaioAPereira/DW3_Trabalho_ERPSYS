@@ -38,16 +38,16 @@
                   <tr>
                     <td>
                       {# Link para visualização dos dados #}
-                      <a href="/contas/viewContas/{{ reg.contaid }}" title="Visualizar">
+                      <a href="/contas/viewContas/{{ reg.contasid }}" title="Visualizar">
                         <i class="fas fa-search"></i>
                       </a>
 
                       {# Link para atualização e remoção dos dados #}
-                      <a href="/contas/UpdateContas/{{ reg.contaid }}" title="Atualizar" style="margin-left: 10px;">
+                      <a href="/contas/UpdateContas/{{ reg.contasid }}" title="Atualizar" style="margin-left: 10px;">
                         <i class="fas fa-pencil-alt"></i>
                       </a>
                     </td>
-                    <td>{{ reg.contaid }}</td>
+                    <td>{{ reg.contasid }}</td>
                     <td>{{ reg.descricao }}</td>
                     
                     <td>{{ reg.valor | round(2) }}</td>
