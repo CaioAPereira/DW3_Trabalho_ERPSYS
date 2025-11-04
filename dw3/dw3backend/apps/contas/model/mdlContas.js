@@ -1,9 +1,9 @@
 const db = require("../../../database/databaseconfig");
+const { get } = require("../../../routes/router");
 
 const getAllContas = async () => {
   return (
     await db.query(
-      // CORRIGIDO: PostgreSQL usa nomes em minúsculo, a menos que sejam criados com ""
       "SELECT *, (SELECT nomerazaosocial from clientes where clienteid = contas.clienteid)" +
         "FROM contas WHERE removido = false ORDER BY contasid ASC"
     )
@@ -13,9 +13,18 @@ const getAllContas = async () => {
 const getContaByID = async (contaIDPar) => {
   return (
     await db.query(
-      // CORRIGIDO: 'nomerazaosocial' minúsculo
       "SELECT *, (SELECT nomerazaosocial from clientes where clienteid = contas.clienteid)" +
         "FROM contas WHERE contasid = $1 and removido = false",
+      [contaIDPar]
+    )
+  ).rows;
+};
+
+const getContaByIDGeral = async (contaIDPar) => {
+  return (
+    await db.query(
+      "SELECT *, (SELECT nomerazaosocial from clientes where clienteid = contas.clienteid)" +
+        "FROM contas WHERE contasid = $1",
       [contaIDPar]
     )
   ).rows;
@@ -25,7 +34,7 @@ const insertContas = async (contaREGPar) => {
   let linhasAfetadas;
   let msg = "ok";
   try {
-    // TRATAMENTO DE DADOS: Converte strings vazias ou nulos do frontend para 'null' do banco
+  
     const valor = contaREGPar.valor || null;
     const dtavencimento = contaREGPar.dtavencimento || null;
     const dtarecebimento = contaREGPar.dtarecebimento || null;
@@ -34,8 +43,7 @@ const insertContas = async (contaREGPar) => {
 
     linhasAfetadas = (
       await db.query(
-        // CORRIGIDO: Usei os nomes de colunas em minúsculo (como o PostgreSQL usa)
-        "INSERT INTO contas (removido, valor, datavencimento, datarecebimento, descricao, clienteid) " +
+        "INSERT INTO contas (removido, valor, dtavencimento, dtarecebimento, descricao, clienteid) " +
           "values(default, $1, $2, $3, $4, $5)",
         [valor, dtavencimento, dtarecebimento, descricao, clienteid]
       )
@@ -52,33 +60,31 @@ const UpdateContas = async (contaREGPar) => {
   let linhasAfetadas;
   let msg = "ok";
   try {
-    // TRATAMENTO DE DADOS
     const dtarecebimento = contaREGPar.dtarecebimento || null;
     const clienteid = contaREGPar.clienteid || null;
     linhasAfetadas = (
       await db.query(
-        // CORRIGIDO: Nomes de colunas em minúsculo
         "UPDATE contas SET " +
           "valor = $2, " +
-          "datavencimento = $3, " +
-          "datarecebimento= $4, " +
+          "dtavencimento = $3, " +
+          "dtarecebimento= $4, " +
           "descricao = $5, " +
           "removido = $6, " +
           "clienteid = $7 " +
           "WHERE contasid = $1",
         [
+
           contaREGPar.contasid,
           contaREGPar.valor,
           contaREGPar.dtavencimento,
-          dtarecebimento, // tratado
+          dtarecebimento,
           contaREGPar.descricao,
           contaREGPar.removido,
-          clienteid, // tratado
+          clienteid,
         ]
       )
     ).rowCount;
   } catch (error) {
-    // CORRIGIDO: Usar .message
     msg = "[mdlContas|updateContas] " + error.message;
     linhasAfetadas = -1;
   }
@@ -98,7 +104,6 @@ const DeleteContas = async (contaREGPar) => {
       )
     ).rowCount;
   } catch (error) {
-    // CORRIGIDO: Usar .message e nome da função
     msg = "[mdlContas|DeleteContas] " + error.message;
     linhasAfetadas = -1;
   }
@@ -109,6 +114,7 @@ const DeleteContas = async (contaREGPar) => {
 module.exports = {
   getAllContas,
   getContaByID,
+  getContaByIDGeral,
   insertContas,
   UpdateContas,
   DeleteContas,
