@@ -3,7 +3,6 @@ const db = require("../../../database/databaseconfig");
 const GetAllClientes = async () => {
   return (
     await db.query(
-      // CORRIGIDO: Coluna 'nomerazaosocial' em minúsculo
       "SELECT * FROM clientes where removido = false ORDER BY nomerazaosocial ASC"
     )
   ).rows;
@@ -12,7 +11,6 @@ const GetAllClientes = async () => {
 const GetClienteByID = async (clienteIDPar) => {
   return (
     await db.query(
-      // CORRIGIDO: Coluna 'nomerazaosocial' em minúsculo
       "SELECT * " +
         "FROM clientes WHERE clienteid = $1 and removido = false ORDER BY nomerazaosocial ASC",
       [clienteIDPar]
@@ -24,19 +22,17 @@ const InsertClientes = async (registroPar) => {
   let linhasAfetadas;
   let msg = "ok";
   try {
-    // Tratamento para garantir que NOT NULL não falhe
     const nome = registroPar.nomerazaosocial || null;
     const cpf = registroPar.cpf_cnpj || null;
 
     linhasAfetadas = (
       await db.query(
-        // CORRIGIDO: Colunas em minúsculo
         "INSERT INTO clientes (removido, nomerazaosocial, cpf_cnpj, email) " +
           "values(default, $1, $2, $3)",
         [
           nome,
           cpf,
-          registroPar.email, // email pode ser nulo pela sua tabela
+          registroPar.email,
         ]
       )
     ).rowCount;
@@ -52,13 +48,11 @@ const UpdateClientes = async (registroPar) => {
   let linhasAfetadas;
   let msg = "ok";
   try {
-    // Tratamento para garantir que NOT NULL não falhe
     const nome = registroPar.nomerazaosocial || null;
     const cpf = registroPar.cpf_cnpj || null;
 
     linhasAfetadas = (
       await db.query(
-        // CORRIGIDO: Colunas em minúsculo
         "UPDATE clientes SET " +
           "cpf_cnpj = $2, " +
           "nomerazaosocial = $3, " +
@@ -68,7 +62,7 @@ const UpdateClientes = async (registroPar) => {
         [
           registroPar.clienteid,
           cpf,
-          nome, // CORRIGIDO: Lendo a propriedade 'nomerazaosocial' (minúsculo)
+          nome,
           registroPar.email,
           registroPar.removido,
         ]

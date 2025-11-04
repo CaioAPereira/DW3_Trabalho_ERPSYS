@@ -1,4 +1,5 @@
 const db = require("../../../database/databaseconfig");
+const { get } = require("../../../routes/router");
 
 const getAllContas = async () => {
   return (
@@ -19,22 +20,32 @@ const getContaByID = async (contaIDPar) => {
   ).rows;
 };
 
+const getContaByIDGeral = async (contaIDPar) => {
+  return (
+    await db.query(
+      "SELECT *, (SELECT nomerazaosocial from clientes where clienteid = contas.clienteid)" +
+        "FROM contas WHERE contasid = $1",
+      [contaIDPar]
+    )
+  ).rows;
+};
+
 const insertContas = async (contaREGPar) => {
   let linhasAfetadas;
   let msg = "ok";
   try {
-    // TRATAMENTO DE DADOS:
-    const valor = contaREGPar.valor || null; // ### CORREÇÃO: Ler 'datavencimento' (com 'a') ###
-    const datavencimento = contaREGPar.datavencimento || null;
-    const datarecebimento = contaREGPar.datarecebimento || null;
+  
+    const valor = contaREGPar.valor || null;
+    const dtavencimento = contaREGPar.dtavencimento || null;
+    const dtarecebimento = contaREGPar.dtarecebimento || null;
     const descricao = contaREGPar.descricao || null;
     const clienteid = contaREGPar.clienteid || null;
 
     linhasAfetadas = (
       await db.query(
-        "INSERT INTO contas (removido, valor, datavencimento, datarecebimento, descricao, clienteid) " +
-          "values(default, $1, $2, $3, $4, $5)", // ### CORREÇÃO: Passar a variável correta ###
-        [valor, datavencimento, datarecebimento, descricao, clienteid]
+        "INSERT INTO contas (removido, valor, dtavencimento, dtarecebimento, descricao, clienteid) " +
+          "values(default, $1, $2, $3, $4, $5)",
+        [valor, dtavencimento, dtarecebimento, descricao, clienteid]
       )
     ).rowCount;
   } catch (error) {
@@ -49,23 +60,23 @@ const UpdateContas = async (contaREGPar) => {
   let linhasAfetadas;
   let msg = "ok";
   try {
-    const dtarecebimento = contaREGPar.datarecebimento || null;
+    const dtarecebimento = contaREGPar.dtarecebimento || null;
     const clienteid = contaREGPar.clienteid || null;
     linhasAfetadas = (
       await db.query(
         "UPDATE contas SET " +
           "valor = $2, " +
-          "datavencimento = $3, " +
-          "datarecebimento= $4, " +
+          "dtavencimento = $3, " +
+          "dtarecebimento= $4, " +
           "descricao = $5, " +
           "removido = $6, " +
           "clienteid = $7 " +
           "WHERE contasid = $1",
         [
-          // ### CORREÇÃO: Ler 'contasid' (com 's') ###
+
           contaREGPar.contasid,
-          contaREGPar.valor, // ### CORREÇÃO: Ler 'datavencimento' (com 'a') ###
-          contaREGPar.datavencimento,
+          contaREGPar.valor,
+          contaREGPar.dtavencimento,
           dtarecebimento,
           contaREGPar.descricao,
           contaREGPar.removido,
@@ -88,7 +99,7 @@ const DeleteContas = async (contaREGPar) => {
   try {
     linhasAfetadas = (
       await db.query(
-        "UPDATE contas SET " + "removido = true " + "WHERE contasid = $1", // ### CORREÇÃO: Ler 'contasid' (com 's') ###
+        "UPDATE contas SET " + "removido = true " + "WHERE contasid = $1",
         [contaREGPar.contasid]
       )
     ).rowCount;
@@ -103,6 +114,7 @@ const DeleteContas = async (contaREGPar) => {
 module.exports = {
   getAllContas,
   getContaByID,
+  getContaByIDGeral,
   insertContas,
   UpdateContas,
   DeleteContas,

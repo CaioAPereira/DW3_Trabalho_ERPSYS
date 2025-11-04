@@ -12,8 +12,14 @@ const getContaByID = (req, res) =>
     let registro = await mdlContas.getContaByID(contaID);
     res.json({ status: "ok", registro: registro });
   })();
+  
+const getContaByIDGeral = (req, res) =>
+  (async () => {
+    const contaID = parseInt(req.body.contaid);
+    let registro = await mdlContas.getContaByIDGeral(contaID);
+    res.json({ status: "ok", registro: registro });
+})();
 
-// (Sua função insertContas já estava correta)
 const insertContas = (request, res) =>
   (async () => {
     try {
@@ -34,14 +40,12 @@ const insertContas = (request, res) =>
     }
   })();
 
-// =======================================================================
-// @ Função de Atualização (CORRIGIDA)
-// =======================================================================
+
 const updateContas = (request, res) =>
   (async () => {
     try {
       const contaREG = request.body;
-      let { msg, linhasAfetadas } = await mdlContas.UpdateContas(contaREG); // ### CORREÇÃO DA RESPOSTA JSON ###
+      let { msg, linhasAfetadas } = await mdlContas.UpdateContas(contaREG);
       let status = msg === "ok" ? "ok" : "erro";
       res.json({ status: status, msg: msg, linhasAfetadas: linhasAfetadas });
     } catch (error) {
@@ -57,14 +61,11 @@ const updateContas = (request, res) =>
     }
   })();
 
-// =======================================================================
-// @ Função de Exclusão (CORRIGIDA)
-// =======================================================================
 const DeleteContas = (request, res) =>
   (async () => {
     try {
       const contaREG = request.body;
-      let { msg, linhasAfetadas } = await mdlContas.DeleteContas(contaREG); // ### CORREÇÃO DA RESPOSTA JSON ###
+      let { msg, linhasAfetadas } = await mdlContas.DeleteContas(contaREG);
 
       let status = msg === "ok" ? "ok" : "erro";
       res.json({ status: status, msg: msg, linhasAfetadas: linhasAfetadas });
@@ -84,6 +85,7 @@ const DeleteContas = (request, res) =>
 module.exports = {
   getAllContas,
   getContaByID,
+  getContaByIDGeral,
   insertContas,
   updateContas,
   DeleteContas,

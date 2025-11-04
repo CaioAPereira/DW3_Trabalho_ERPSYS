@@ -20,18 +20,18 @@ const manutContas = async (req, res) =>
             Authorization: `Bearer ${token}`,
           },
         }
-      ); // CORRETO: Formato DD/MM/YYYY para a tabela
+      );
 
       const dadosFormatados = resp.data.registro.map((conta) => {
-        if (conta.datavencimento) {
+        if (conta.dtavencimento) {
           // Corrigido: 'datavencimento'
-          conta.datavencimento = moment(conta.datavencimento).format(
+          conta.dtavencimento = moment(conta.dtavencimento).format(
             "DD/MM/YYYY"
           );
         }
-        if (conta.datarecebimento) {
-          // Corrigido: 'datarecebimento'
-          conta.datarecebimento = moment(conta.datarecebimento).format(
+        if (conta.dtarecebimento) {
+    
+          conta.dtarecebimento = moment(conta.dtarecebimento).format(
             "DD/MM/YYYY"
           );
         }
@@ -45,7 +45,7 @@ const manutContas = async (req, res) =>
         userName: userName,
       });
     } catch (error) {
-      // ... (código de erro está ok) ...
+
       let remoteMSG = "";
       if (error.code === "ECONNREFUSED") {
         remoteMSG = "Servidor indisponível";
@@ -64,12 +64,11 @@ const manutContas = async (req, res) =>
   })();
 
 // =======================================================================
-// @ Função de Inserção de Contas (CORRIGIDA)
+// @ Função de Inserção de Contas
 // =======================================================================
 const insertContas = async (req, res) =>
   (async () => {
     if (req.method == "GET") {
-      // ... (O seu GET estava correto) ...
       const token = req.session.token;
       try {
         const clientes = await axios.get(
@@ -117,11 +116,11 @@ const insertContas = async (req, res) =>
             },
             timeout: 5000,
           }
-        ); // ### CORREÇÃO DO ERRO 'undefined' ### // O 'msg' do frontend deve ler o 'msg' do backend
+        );
 
         res.json({
           status: response.data.status,
-          msg: response.data.msg, // CORRIGIDO
+          msg: response.data.msg,
           data: response.data,
           erro: null,
         });
@@ -141,7 +140,7 @@ const insertContas = async (req, res) =>
   })();
 
 // =======================================================================
-// @ Função de Visualização de Contas (CORRIGIDA)
+// @ Função de Visualização de Contas
 // =======================================================================
 const ViewContas = async (req, res) =>
   (async () => {
@@ -151,7 +150,7 @@ const ViewContas = async (req, res) =>
     try {
       const id = req.params.id;
       const response = await axios.post(
-        process.env.SERVIDOR_DW3Back + "/getContaByID",
+        process.env.SERVIDOR_DW3Back + "/getContaByIDGeral",
         { contaid: id },
         {
           headers: {
@@ -171,14 +170,14 @@ const ViewContas = async (req, res) =>
                 Authorization: `Bearer ${token}`,
               },
             }
-          ); // ### CORREÇÃO DA DATA ### // 1. Use 'datavencimento' (minúsculo, com 'data') // 2. Use o formato "YYYY-MM-DD" para o <input type="date">
+          ); 
 
-          response.data.registro[0].datavencimento = moment(
-            response.data.registro[0].datavencimento
+          response.data.registro[0].dtavencimento = moment(
+            response.data.registro[0].dtavencimento
           ).format("YYYY-MM-DD");
-          if (response.data.registro[0].datarecebimento) {
-            response.data.registro[0].datarecebimento = moment(
-              response.data.registro[0].datarecebimento
+          if (response.data.registro[0].dtarecebimento) {
+            response.data.registro[0].dtarecebimento = moment(
+              response.data.registro[0].dtarecebimento
             ).format("YYYY-MM-DD");
           }
 
@@ -202,7 +201,7 @@ const ViewContas = async (req, res) =>
   })();
 
 // =======================================================================
-// @ Função de Atualização de Contas (CORRIGIDA)
+// @ Função de Atualização de Contas
 // =======================================================================
 const UpdateContas = async (req, res) =>
   (async () => {
@@ -234,14 +233,14 @@ const UpdateContas = async (req, res) =>
                   Authorization: `Bearer ${token}`,
                 },
               }
-            ); // ### CORREÇÃO DA DATA ### // 1. Use 'datavencimento' (minúsculo, com 'data') // 2. Use o formato "YYYY-MM-DD" para o <input type="date">
+            ); 
 
-            response.data.registro[0].datavencimento = moment(
-              response.data.registro[0].datavencimento
+            response.data.registro[0].dtavencimento = moment(
+              response.data.registro[0].dtavencimento
             ).format("YYYY-MM-DD");
-            if (response.data.registro[0].datarecebimento) {
-              response.data.registro[0].datarecebimento = moment(
-                response.data.registro[0].datarecebimento
+            if (response.data.registro[0].dtarecebimento) {
+              response.data.registro[0].dtarecebimento = moment(
+                response.data.registro[0].dtarecebimento
               ).format("YYYY-MM-DD");
             }
 
@@ -254,10 +253,10 @@ const UpdateContas = async (req, res) =>
               erro: null,
             });
           } catch (errorClientes) {
-            // ... (seu código de erro está ok) ...
+  
           }
         } else {
-          // ... (seu código de erro está ok) ...
+
         }
       } else {
         // POST

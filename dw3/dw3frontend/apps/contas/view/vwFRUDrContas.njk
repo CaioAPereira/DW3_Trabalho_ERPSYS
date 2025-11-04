@@ -31,15 +31,15 @@
         <!-- Linha 2: Datas -->
         <div class="row align-items-end mb-3">
           <div class="col-md-6">
-            <label for="datavencimento" class="form-label">Data de Vencimento</label>
-            <input type="date" class="form-control" id="datavencimento"
-                   x-model="form.datavencimento" x-bind:disabled="disabled">
+            <label for="dtavencimento" class="form-label">Data de Vencimento</label>
+            <input type="date" class="form-control" id="dtavencimento"
+                   x-model="form.dtavencimento" x-bind:disabled="disabled">
           </div>
 
           <div class="col-md-6">
-            <label for="datarecebimento" class="form-label">Data de Recebimento</label>
-            <input type="date" class="form-control" id="datarecebimento"
-                   x-model="form.datarecebimento" x-bind:disabled="disabled">
+            <label for="dtarecebimento" class="form-label">Data de Recebimento</label>
+            <input type="date" class="form-control" id="dtarecebimento"
+                   x-model="form.dtarecebimento" x-bind:disabled="disabled">
           </div>
         </div>
 
@@ -49,7 +49,7 @@
             <label for="clienteid" class="form-label">Cliente</label>
             <select class="form-select" id="clienteid"
                     x-model="form.clienteid" x-bind:disabled="disabled" name="clienteid">
-              <option value="">Selecione um cliente</option>
+              <option value="">Cliente Excluído</option>
               {% for cli in clientes %}
               <option value="{{ cli.clienteid }}" {% if data.clienteid == cli.clienteid %}selected{% endif %}>
                 {{ cli.nomerazaosocial }}
@@ -93,8 +93,8 @@
         contasid: "{{data.contasid}}",
         valor: "{{data.valor}}",
         descricao: "{{data.descricao}}",
-        datavencimento: "{{data.datavencimento}}",
-        datarecebimento: "{{data.datarecebimento}}",
+        dtavencimento: "{{data.dtavencimento}}",
+        dtarecebimento: "{{data.dtarecebimento}}",
         clienteid: "{{data.clienteid}}",
         removido: {{data.removido | dump | safe }}
       },

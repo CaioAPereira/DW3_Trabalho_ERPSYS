@@ -45,6 +45,15 @@ Authorization: Bearer {{accessToken}}
     "contaid": 2
 }
 
+### teste de buscar conta por ID
+POST http://localhost:40000/getContaByIDGeral HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{    
+    "contaid": 3
+}
+
 
 
 ### teste de atualização de conta
